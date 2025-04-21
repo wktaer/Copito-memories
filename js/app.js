@@ -45,9 +45,33 @@ class PhotoGallery {
     }
 
     async fetchPhotosFromCloud() {
-        // Esta función se conectará con My Cloud Home
-        // Por ahora retornamos un array vacío hasta implementar la autenticación
-        return [];
+        if (!MyCloudHomeConfig.accessToken || MyCloudHomeConfig.accessToken === 'YOUR_ACCESS_TOKEN') {
+            console.warn('Token de acceso no configurado. Configura tu token en config.js');
+            return [];
+        }
+
+        try {
+            const response = await fetch(`${MyCloudHomeConfig.api.baseUrl}${MyCloudHomeConfig.api.endpoints.photos}`, {
+                headers: {
+                    'Authorization': `Bearer ${MyCloudHomeConfig.accessToken}`,
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error al obtener fotos: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data.items.map(photo => ({
+                url: photo.downloadUrl,
+                title: photo.name,
+                description: photo.description || 'Un recuerdo especial de Copito'
+            }));
+        } catch (error) {
+            console.error('Error al obtener fotos de My Cloud Home:', error);
+            throw error;
+        }
     }
 
     renderPhotos(photos) {
