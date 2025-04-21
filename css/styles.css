@@ -1,0 +1,186 @@
+/* Estilos personalizados para la página de recuerdos de Copito */
+:root {
+    --primary-color: #FF9F67;
+    --accent-color: #FFD93D;
+    --background-color: #FFF6E9;
+    --text-color: #4A4A4A;
+    --secondary-color: #6BCB77;
+    --font-family: 'Quicksand', 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    position: relative;
+}
+
+/* Decoración de huellas y huesos en el fondo */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30,50 C30,44 34,40 40,40 C46,40 50,44 50,50 C50,56 46,60 40,60 C34,60 30,56 30,50 M60,50 C60,44 64,40 70,40 C76,40 80,44 80,50 C80,56 76,60 70,60 C64,60 60,56 60,50 M40,20 C40,14 44,10 50,10 C56,10 60,14 60,20 C60,26 56,30 50,30 C44,30 40,26 40,20 M40,80 C40,74 44,70 50,70 C56,70 60,74 60,80 C60,86 56,90 50,90 C44,90 40,86 40,80' fill='rgba(255, 159, 103, 0.15)'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20,50 L80,50 M40,30 L60,30 M40,70 L60,70' stroke='rgba(255, 217, 61, 0.2)' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-size: 60px 60px, 40px 40px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.8;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 150px 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 30px 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: var(--background-color);
+    border-radius: 50% 50% 0 0;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: bounce 1s ease-in-out;
+}
+
+.hero-section .lead {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 159, 103, 0.4);
+}
+
+.memory-card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 30px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.memory-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.memory-card .card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+
+.memory-card .card-body {
+    padding: 1.5rem;
+}
+
+.memory-card .card-title {
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.timeline {
+    position: relative;
+    padding: 2rem 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 2px;
+}
+
+.timeline-item {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.timeline-item:hover {
+    transform: scale(1.02);
+}
+
+.timeline-item h4 {
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+footer {
+    background-color: white !important;
+    border-top: 3px solid var(--accent-color);
+    padding: 2rem 0 !important;
+}
+
+footer p {
+    color: var(--primary-color) !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(-20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 100px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.2rem;
+    }
+    
+    .timeline::before {
+        left: 20px;
+    }
+}

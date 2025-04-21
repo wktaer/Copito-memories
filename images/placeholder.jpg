@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#f0f0f0"/>
+  <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#666" text-anchor="middle" dy=".3em">Imagen de Recuerdo</text>
+  <rect x="120" y="80" width="60" height="40" fill="none" stroke="#666" stroke-width="2"/>
+  <line x1="140" y1="90" x2="160" y2="110" stroke="#666" stroke-width="2"/>
+  <line x1="160" y1="90" x2="140" y2="110" stroke="#666" stroke-width="2"/>
+</svg>

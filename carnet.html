@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carnet de Identidad - Copito</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        .carnet-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .carnet {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            color: #333;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+        .franja-tricolor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(to right, #0039A6 33.33%, #FFFFFF 33.33% 66.66%, #D52B1E 66.66%);
+        }
+        .escudo-chile {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            opacity: 0.8;
+        }
+        .carnet-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 15px;
+        }
+        .carnet-header h3 {
+            font-size: 16px;
+            color: #0039A6;
+            margin: 0;
+            font-weight: bold;
+        }
+        .carnet-header p {
+            font-size: 12px;
+            color: #666;
+            margin: 5px 0 0;
+        }
+        .foto-container {
+            width: 120px;
+            height: 150px;
+            overflow: hidden;
+            margin: 0;
+            border: 2px solid #0039A6;
+            position: relative;
+            float: left;
+            margin-right: 20px;
+        }
+        .foto-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carnet-datos {
+            margin-left: 140px;
+            font-size: 14px;
+        }
+        .dato-row {
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .dato-label {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
+        .dato-valor {
+            font-weight: bold;
+            color: #333;
+        }
+        .numero-documento {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: #0039A6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="carnet-container">
+            <div class="carnet">
+                <div class="franja-tricolor"></div>
+                <svg class="escudo-chile" viewBox="0 0 100 100">
+                    <path d="M50,10 L90,40 L50,70 L10,40 Z" fill="#0039A6"/>
+                    <circle cx="50" cy="40" r="15" fill="#FFFFFF"/>
+                    <path d="M50,30 L55,40 L50,50 L45,40 Z" fill="#D52B1E"/>
+                </svg>
+                <div class="carnet-header">
+                    <h3>REPÚBLICA DE CHILE</h3>
+                    <p>SERVICIO DE REGISTRO CIVIL E IDENTIFICACIÓN</p>
+                    <p>CÉDULA DE IDENTIDAD CANINA</p>
+                </div>
+                <div class="carnet-content">
+                    <div class="foto-container">
+                        <img id="foto-preview" src="https://i.ibb.co/20g1trGm/IMG-20250418-WA0030.jpg" alt="Foto de Copito">
+                    </div>
+                    <div class="carnet-datos">
+                        <div class="dato-row">
+                            <span class="dato-label">RUN</span>
+                            <span class="dato-valor">20.456.789-K</span>
+                        </div>
+                        <div class="dato-row">
+                            <span class="dato-label">APELLIDOS</span>
+                            <span class="dato-valor">DE LA CASA FAMILIA</span>
+                        </div>
+                        <div class="dato-row">
+                            <span class="dato-label">NOMBRES</span>
+                            <span class="dato-valor">COPITO</span>
+                        </div>
+                        <div class="dato-row">
+                            <span class="dato-label">NACIONALIDAD</span>
+                            <span class="dato-valor">CHILENA</span>
+                        </div>
+                        <div class="dato-row">
+                            <span class="dato-label">FECHA DE NACIMIENTO</span>
+                            <span class="dato-valor">01 ENE 2020</span>
+                        </div>
+                        <div class="dato-row">
+                            <span class="dato-label">RAZA</span>
+                            <span class="dato-valor">MESTIZO</span>
+                        </div>
+                    </div>
+                    <div class="numero-documento">
+                        <strong>N° Documento:</strong> 123456789
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
