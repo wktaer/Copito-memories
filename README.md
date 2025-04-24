@@ -1,12 +1,12 @@
 # Recuerdos de Copito
 
-Una aplicación web para almacenar y mostrar los recuerdos especiales de Copito, integrada con My Cloud Home.
+Una aplicación web para almacenar y mostrar los recuerdos especiales de Copito, integrada con Google Drive.
 
-## Configuración de My Cloud Home
+## Configuración de Google Drive
 
-Para conectar la aplicación con tu cuenta de My Cloud Home, sigue estos pasos:
+Para conectar la aplicación con tu cuenta de Google Drive, sigue estos pasos:
 
-1. Accede a tu cuenta de My Cloud Home
+1. Accede a tu cuenta de Google Drive
 2. Ve a la sección de configuración
 3. En la sección de API, genera un nuevo token de acceso
 4. Copia el token generado
@@ -27,14 +27,14 @@ Para conectar la aplicación con tu cuenta de My Cloud Home, sigue estos pasos:
 
 ## Uso
 
-1. Configura tu conexión con My Cloud Home
+1. Configura tu conexión con Google Drive
 2. Abre index.html en tu navegador
-3. Las fotos se cargarán automáticamente desde tu My Cloud Home
+3. Las fotos se cargarán automáticamente desde tu Google Drive
 4. Desplázate hacia abajo para cargar más fotos
 
 ## Características
 
-- Carga dinámica de fotos desde My Cloud Home
+- Carga dinámica de fotos desde Google Drive
 - Interfaz responsive y amigable
 - Diseño personalizado con tema de mascotas
-- Carnet digital de Copito"# Copito-memories" 
+- Carnet digital de Copito"# Copito-memories"

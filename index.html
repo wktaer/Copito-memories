@@ -1,54 +1,196 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuerdos de Copito</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Recuerdos con mi Mascota 🐶</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff8f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #ffb347;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .botones {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 1rem 0;
+    }
+
+    .botones button {
+      background-color: #ffb347;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 1rem;
+    }
+
+    .foto {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #fffaf3;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .foto img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px 12px 0 0;
+      cursor: pointer;
+    }
+
+    .titulo {
+      padding: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #444;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .overlay img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 20px;
+    }
+
+    .cerrar {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+    }
+
+    body.bloqueado {
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
-    <div class="hero-section mb-5">
-        <div class="container text-center">
-            <h1 class="display-4"><i class="fas fa-paw me-2"></i>Recuerdos de Copito<i class="fas fa-paw ms-2"></i></h1>
-            <p class="lead">Un espacio lleno de amor para nuestro amigo peludo más especial</p>
-            <div class="mt-4 d-flex justify-content-center gap-3">
-                <button class="btn btn-primary btn-lg" onclick="document.getElementById('photo-gallery').scrollIntoView({behavior: 'smooth'})"><i class="fas fa-images me-2"></i>Ver Galería</button>
-                <a href="carnet.html" class="btn btn-primary btn-lg"><i class="fas fa-id-card me-2"></i>Carnet Copito</a>
-            </div>
-        </div>
-    </div>
 
-    <div class="container">
-        <div class="row mb-5">
-            <div class="col-12 text-center">
-                <h2><i class="fas fa-camera me-2"></i>Galería de Momentos</h2>
-                <p class="text-muted">Cada foto cuenta una historia única y especial</p>
-            </div>
-        </div>
+<header>
+  🐾 Recuerdos con mi mascota
+</header>
 
-        <div class="row" id="photo-gallery">
-            <!-- Las fotos se cargarán dinámicamente desde My Cloud Home -->
-        </div>
+<div class="botones">
+    <a href="index.html">
+        <button>Inicio</button>
+      </a>
+      <a href="carnet.html">
+        <button>Carnet Copito</button>
+      </a>
 
-        <div id="loading" class="row mt-3 mb-3 d-none">
-            <div class="col-12 text-center">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Cargando...</span>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 
-    <footer class="py-4">
-        <div class="container text-center">
-            <p class="mb-0"><i class="fas fa-heart me-2"></i>Con amor infinito para nuestro Copito<i class="fas fa-heart ms-2"></i></p>
-        </div>
-    </footer>
+<div class="galeria" id="galeria"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/app.js"></script>
+<div class="overlay" id="overlay">
+  <span class="cerrar" onclick="cerrarOverlay()">×</span>
+  <img id="imagenGrande" src="">
+</div>
+
+<script>
+  const DROPBOX_TOKEN = 'sl.u.AFrv6qw-MqwgfTXX1yP38WFh1KtsorL1LwwoU_qgnuI3pSXU4Cz_ZW5baCBJgHdI7RXKiEG-hg4RPzcAm6VTd5yzoerful5OcAysJrrJdUQ1Il2fdrdPfSaN7iLbZ8r-u8UEmEsI_NXqtdY6fexccOC1ZZa1HXmMc_UbERpFBEZy8zpUPb6oS_-Iqp8vaYul8GpTztTE49D-HvfUQH5gALs39cBuQPM3vhOjD1qtK2owgLHOwLIQyE-ZLy3sa7mH0e7YZy7GchXJ8wm0GlWbf2-TiUTbEhjMYsVNkJHaPvVAIFoXPFnKyvk10QDSVVwtNeOeLZuYU4UXq_YWZkjMsO0G_DWB2yZDaaQ118YGKUynp6BHCIoeDCdrJbrqA--VDcOMmfVvb-fr3lPd8gYSDvESBuNncYDgqlspWc_DOE3QxKCTy0_geWXjLzJJqoNytrXRUuyB3JpYJE8KJbR51a4WrPkE78S2RnEkJ-zEF1UOLLdOIVOzCiPQunIbkaFp8eZG6ie4OwpbYwQRglzR_62uhbwteC0CY0bVx4AIv0d6xWPkP1cQMq08r3QnDgRQ_HtFcj0deDYd2oR-674up4GMt3-CLleew_L9_guuxJA_iCRE8OBplkrCj8z0yMr5raBXChTOtweKqeID4qQHQID1fUkDsbpv_UXxwD7rCuUw3-M2wVdgpgmBUhY9TSwz7VUBA-NSGmX81m8WodXKzFV_JTGIlt2VTu_Cz0Uj6r0z6KS0_73fPiqp13Lm69Pn-OBBYbX05RjqYUAR6VQ5kHeZ_44dfs713JQcsOnV4v0jjlafZqZ-NfB4k3ob8l0qBC9msCsjQ3IBMVIr8g-0lAdW7YKRzXZrjmhNE_moLFr0mR0VyGPKXlMRM5fT_cE-ILlxfv_5CASBbxn-Ddrm4hfgZ5xsZ19xU5srHFeiwenKqUlBZNOZokAYqhzRVOJcQrxKLn5P4QvxzEyKqAS5vKU4JVvxCXPQy-sQ2CEy9B6Vezd94FlRBMn_m30kA5f7lCU9znfnFhfnLJ5XsoVqA_Zi23nsdrOBX3koOye1bX-evH50peEpYeSpp2zcVuIa3m5rQjy-sMYDK-K5zIWxaP_DuExcX6GlnVrjoCgsrz6PerhVPIRUyRV2TCIKRlRl2Plnzky-HjIfM8xkCR4ho89fuNLDqi2JDEElekStRuyTtF9AQXhwKDCGiEFv6IuSQvEKdGTYYvJJlVzFA77siIFAtcu76cEulVmFjOzz7WsF-DGdI7T990khAfeZnQdbjC8ERIUxfc-gVv8Y8LL3ol6JViB-jy5h1V4tg_VOPKQo4wvd9Tk9nilWkaqmU1CsF1Uz9i2OAUsasyTUrt7ShX7g1cIsWMAr7vo0sI9vKaDkQG0Y2XNkugaQ0oE7LH73QV9tzGrzHAnItj8UDSD6uwpt2nJjMVlzUllpyRfNhsmI_A';
+  const CARPETA = '/Copito-memories'; // cambia por tu carpeta
+
+  function formatearTitulo(nombreArchivo) {
+    return nombreArchivo
+      .replace(/\.[^/.]+$/, '')        // Quita extensión
+      .replace(/[_-]/g, ' ')           // Reemplaza _ o - por espacio
+      .replace(/\b\w/g, l => l.toUpperCase()); // Capitaliza cada palabra
+  }
+
+  async function cargarFotos() {
+    const respuesta = await fetch('https://api.dropboxapi.com/2/files/list_folder', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + DROPBOX_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ path: CARPETA })
+    });
+
+    const data = await respuesta.json();
+    const galeria = document.getElementById('galeria');
+
+    for (let archivo of data.entries) {
+      if (archivo['.tag'] === 'file' && /\.(jpg|jpeg|png|gif)$/i.test(archivo.name)) {
+        const enlaceTemp = await fetch('https://api.dropboxapi.com/2/files/get_temporary_link', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + DROPBOX_TOKEN,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ path: archivo.path_lower })
+        });
+
+        const { link } = await enlaceTemp.json();
+
+        const contenedor = document.createElement('div');
+        contenedor.className = 'foto';
+
+        const img = document.createElement('img');
+        img.src = link;
+        img.alt = archivo.name;
+        img.onclick = () => mostrarOverlay(link);
+
+        const nombre = document.createElement('div');
+        nombre.className = 'titulo';
+        nombre.textContent = formatearTitulo(archivo.name);
+
+        contenedor.appendChild(img);
+        contenedor.appendChild(nombre);
+        galeria.appendChild(contenedor);
+      }
+    }
+  }
+
+  function mostrarOverlay(src) {
+    document.getElementById('imagenGrande').src = src;
+    document.getElementById('overlay').style.display = 'flex';
+    document.body.classList.add('bloqueado');
+  }
+
+  function cerrarOverlay() {
+    document.getElementById('overlay').style.display = 'none';
+    document.body.classList.remove('bloqueado');
+  }
+
+  cargarFotos();
+</script>
+
 </body>
 </html>
