@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuerdos con Karime 💖</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://upload.cloudinary.com/v1_1/dnrrbultj/upload.js"></script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif; /* Fuente más redondeada */
+            /* background-color: #fff0f5; /* Rosa muy pálido (Lavender Blush) */
+            background: linear-gradient(to bottom, #fff0f5, #ffe4e1); /* Gradiente de rosa pálido a MistyRose */
+            /* Opcional: Añadir un patrón sutil de fondo */
+            /* background-image: url('URL_PATRON_HELLO_KITTY_SUTIL.png'); */
+            text-align: center;
+            margin: 0;
+            color: #555; /* Color de texto general */
+        }
+        h1 {
+            color: #ff69b4; /* Rosa más intenso (Hot Pink) */
+            margin-top: 30px;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(255, 182, 193, 0.5); /* Sombra de texto rosa claro */
+        }
+        .container { /* Añadido para centrar mejor el contenido */
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .upload-section {
+            margin: 30px auto; /* Centrado */
+            background-color: rgba(255, 255, 255, 0.9); /* Blanco semi-transparente */
+            padding: 30px;
+            border-radius: 25px; /* Bordes más redondeados */
+            box-shadow: 0 6px 18px rgba(255, 105, 180, 0.4); /* Sombra rosa más pronunciada */
+            border: 2px dashed #ffb6c1; /* Borde punteado rosa claro */
+            max-width: 500px; /* Ancho máximo */
+        }
+        .upload-section h2 {
+            color: #ff69b4;
+            margin-bottom: 20px;
+        }
+        #uploadForm input[type="file"] {
+            /* Ocultar el input de archivo real */
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        /* Estilo para el label que actuará como botón */
+        .custom-file-upload {
+            display: inline-block;
+            background-color: #ff69b4; /* Rosa */
+            color: white;
+            border: 2px solid white; /* Borde blanco */
+            padding: 12px 25px;
+            border-radius: 50px; /* Botones muy redondeados (píldora) */
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            margin-bottom: 15px; /* Espacio debajo como tenía el input original */
+        }
+
+        .custom-file-upload:hover {
+            background-color: #ff85c1; /* Rosa más claro al pasar el ratón */
+            transform: scale(1.05); /* Agrandar ligeramente */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        #uploadForm button[type="submit"],
+        .close-btn {
+            background-color: #ff69b4; /* Rosa */
+            color: white;
+            border: 2px solid white; /* Borde blanco */
+            padding: 12px 25px;
+            border-radius: 50px; /* Botones muy redondeados (píldora) */
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        #uploadForm button[type="submit"]:hover,
+        .close-btn:hover {
+            background-color: #ff85c1; /* Rosa más claro al pasar el ratón */
+            transform: scale(1.05); /* Agrandar ligeramente */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px; /* Espacio aumentado */
+            margin-top: 40px;
+        }
+        .photo-wrapper {
+            position: relative;
+            display: inline-block;
+            border: 4px dotted #ff69b4; /* Borde punteado rosa intenso */
+            border-radius: 20px; /* Bordes más redondeados */
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .photo-wrapper:hover {
+             transform: scale(1.05) rotate(2deg); /* Agrandar y rotar ligeramente */
+             box-shadow: 0 8px 16px rgba(255, 105, 180, 0.3); /* Sombra rosa al pasar */
+        }
+        .photo-wrapper img {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            display: block; /* Evita espacio extra debajo de la imagen */
+            border-radius: 12px; /* Redondeo interno ligero */
+        }
+        .photo-info {
+            position: absolute;
+            bottom: 0; /* Información abajo */
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 182, 193, 0.85); /* Rosa claro semi-transparente */
+            color: #444; /* Color de texto más oscuro para contraste */
+            font-size: 14px; /* Tamaño ajustado */
+            padding: 15px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            text-align: left; /* Alineación izquierda */
+            border-bottom-left-radius: 18px; /* Redondeo inferior izquierdo */
+            border-bottom-right-radius: 18px; /* Redondeo inferior derecho */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil arriba */
+            border-top: 2px solid white; /* Borde superior blanco */
+        }
+        .photo-wrapper:hover .photo-info {
+            opacity: 1;
+        }
+        .photo-info strong {
+            font-weight: 700;
+            color: #ff69b4; /* Título en rosa intenso */
+            display: block; /* Asegura que el título esté en su propia línea */
+            margin-bottom: 5px; /* Espacio debajo del título */
+        }
+        .delete-btn {
+            position: absolute;
+            top: 10px; /* Botón arriba a la derecha */
+            right: 10px;
+            padding: 8px 8px; /* Ajustar padding para icono */
+            background-color: #ff69b4; /* Rosa */
+            color: white;
+            border: 1px solid white;
+            border-radius: 50%; /* Botón circular */
+            cursor: pointer;
+            font-size: 16px; /* Tamaño para 'X' o icono */
+            line-height: 1; /* Ajuste para centrar el texto si es necesario */
+            font-weight: bold;
+            opacity: 0;
+            transition: all 0.3s ease;
+            width: 30px; /* Ancho fijo */
+            height: 30px; /* Alto fijo */
+            display: flex; /* Centrar contenido */
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .photo-wrapper:hover .delete-btn {
+            opacity: 1; /* Mostrar al pasar el ratón */
+            transform: scale(1.1);
+        }
+        .delete-btn:hover {
+             background-color: #E60012; /* Rojo Hello Kitty al pasar */
+             color: white;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 182, 193, 0.9); /* Fondo rosa claro semitransparente más opaco */
+            /* Opcional: Añadir patrón aquí también */
+            /* backdrop-filter: blur(5px); /* Efecto cristal esmerilado */
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Asegurar que esté por encima */
+        }
+        .overlay-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px; /* Más redondeado */
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            border: 3px solid white; /* Borde blanco */
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto; /* Scroll si el contenido es grande */
+        }
+        .overlay-content img {
+            max-width: 100%;
+            max-height: 60vh; /* Altura máxima de la imagen */
+            display: block;
+            margin: 0 auto 20px auto;
+            border-radius: 15px; /* Más redondeado */
+        }
+        .overlay-content h2 {
+            color: #ff69b4;
+            margin-bottom: 10px;
+        }
+        .overlay-content p {
+            color: #555;
+            margin-bottom: 25px;
+        }
+        /* .close-btn ya está estilizado arriba */
+
+        /* Estilos para el modal de entrada */
+        .input-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 182, 193, 0.9); /* Mismo fondo que el overlay */
+            display: none; /* Oculto por defecto */
+            justify-content: center;
+            align-items: center;
+            z-index: 1001; /* Encima del overlay normal si es necesario */
+        }
+        .input-modal-content {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 20px;
+            text-align: left; /* Alineación izquierda para labels y inputs */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            border: 3px solid white;
+            max-width: 450px; /* Ancho ajustado */
+            width: 90%;
+        }
+        .input-modal-content h2 {
+            color: #ff69b4;
+            margin-bottom: 25px;
+            text-align: center; /* Centrar título del modal */
+        }
+        .input-modal-content label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 700;
+        }
+        .input-modal-content input[type="text"],
+        .input-modal-content textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ffb6c1; /* Borde rosa claro */
+            border-radius: 15px; /* Bordes redondeados */
+            box-sizing: border-box; /* Incluir padding y borde en el ancho */
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+        }
+        .input-modal-content input[type="text"]:focus,
+        .input-modal-content textarea:focus {
+            outline: none;
+            border-color: #ff69b4; /* Borde rosa intenso al enfocar */
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.3);
+        }
+        .input-modal-content button {
+            /* Reutilizar estilos de botones existentes si es posible */
+            background-color: #ff69b4;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            margin-right: 10px; /* Espacio entre botones */
+        }
+        .input-modal-content button:hover {
+            background-color: #ff85c1;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .input-modal-content button.close-btn {
+             background-color: #aaa; /* Color diferente para cancelar */
+        }
+        .input-modal-content button.close-btn:hover {
+             background-color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Nuestros recuerdos Virtuales</h1> 
+        <h2>Las fotos las veremos ambos :3</h2><!-- Añadido lazo -->
+
+        <div class="upload-section">
+            <h2>Sube tus fotos favoritas junto a su texto y mensaje!</h2>
+            <form id="uploadForm">
+                <!-- Input de archivo oculto -->
+                <input type="file" id="fileInput" name="file" accept="image/*" required>
+                <!-- Label estilizado como botón -->
+                <label for="fileInput" class="custom-file-upload">Seleccionar Foto</label>
+                <br> <!-- Salto de línea para separar botones -->
+                <button type="submit">Subir Foto</button>
+            </form>
+        </div>
+
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <!-- Modal para ingresar título y mensaje -->
+    <div class="input-modal" id="inputModal">
+        <div class="input-modal-content">
+            <h2>Detalles de la Foto</h2>
+            <form id="detailsForm">
+                <label for="imageTitleInput">Título:</label>
+                <input type="text" id="imageTitleInput" name="title" required>
+                <label for="imageMessageInput">Mensaje:</label>
+                <textarea id="imageMessageInput" name="message" rows="3" required></textarea>
+                <button type="submit">Guardar Detalles</button>
+                <button type="button" class="close-btn" onclick="closeInputModal()">Cancelar</button> <!-- Reutilizamos clase close-btn si el estilo es similar -->
+            </form>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="overlay-content" id="overlayContent">
+            <img src="" alt="Imagen">
+            <h2 id="imageTitle"></h2>
+            <p id="imageMessage"></p>
+            <button class="close-btn" onclick="closeOverlay()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        function addImageToGallery(url, title, message, publicId) {
+            const photoWrapper = document.createElement('div');
+            photoWrapper.classList.add('photo-wrapper');
+            photoWrapper.innerHTML = `
+                <img src="${url}" alt="Imagen subida" onclick="openOverlay('${url}', '${title}', '${message}')">
+                <div class="photo-info">
+                    <strong>${title}</strong><br>
+                    ${message}
+                </div>
+                <button class="delete-btn" onclick="deleteImage('${publicId}')" title="Eliminar foto">X</button> <!-- Cambiado texto a X y añadido title -->
+            `;
+            document.getElementById('gallery').appendChild(photoWrapper);
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var file = document.getElementById('fileInput').files[0];
+
+            if (file) {
+                var formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'Ninilover');  
+
+                fetch('https://api.cloudinary.com/v1_1/dnrrbultj/image/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Guardar temporalmente los datos de la imagen subida
+                    window.uploadedImageData = data;
+                    // Mostrar el modal personalizado en lugar de los prompts
+                    openInputModal();
+                })
+                .catch(error => {
+                    console.error('Error al subir la imagen:', error);
+                    alert('Hubo un error al subir la imagen');
+                });
+            }
+        });
+
+        async function loadGallery() {
+            const galleryElement = document.getElementById('gallery');
+            galleryElement.innerHTML = ''; // Limpiar la galería antes de cargar
+            const images = JSON.parse(localStorage.getItem('images')) || [];
+            const validImages = [];
+            const checkPromises = [];
+
+            for (const image of images) {
+                // Creamos una promesa para cada verificación de imagen, añadiendo un parámetro para evitar caché
+                const checkUrl = `${image.url}?_=${Date.now()}`;
+                const checkPromise = fetch(checkUrl, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            // Si la imagen existe, la añadimos a las imágenes válidas
+                            validImages.push(image);
+                        } else {
+                            console.log('Imagen no encontrada en Cloudinary, se omitirá:', image.url);
+                        }
+                    })
+                    .catch(error => {
+                        // Si hay un error de red u otro problema, asumimos que no está disponible
+                        console.error('Error al verificar la imagen:', image.url, error);
+                    });
+                checkPromises.push(checkPromise);
+            }
+
+            // Esperamos a que todas las verificaciones terminen
+            await Promise.all(checkPromises);
+
+            // Actualizamos el localStorage con solo las imágenes válidas
+            localStorage.setItem('images', JSON.stringify(validImages));
+
+            // Añadimos solo las imágenes válidas a la galería
+            for (const image of validImages) {
+                addImageToGallery(image.url, image.title, image.message, image.publicId);
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', async () => {
+    await loadGallery();
+});
+
+
+        function openOverlay(imageUrl, title, message) {
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('overlayContent').querySelector('img').src = imageUrl;
+            document.getElementById('imageTitle').textContent = title;
+            document.getElementById('imageMessage').textContent = message;
+        }
+
+        function closeOverlay() {
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // Funciones para el modal de entrada
+        let currentImageData = null; // Variable para guardar datos temporalmente
+
+        function openInputModal() {
+            currentImageData = window.uploadedImageData; // Guardar datos de la imagen actual
+            document.getElementById('inputModal').style.display = 'flex';
+            document.getElementById('imageTitleInput').value = ''; // Limpiar campos
+            document.getElementById('imageMessageInput').value = '';
+            document.getElementById('imageTitleInput').focus(); // Poner foco en el primer campo
+        }
+
+        function closeInputModal() {
+            document.getElementById('inputModal').style.display = 'none';
+            currentImageData = null; // Limpiar datos temporales
+            window.uploadedImageData = null; // Limpiar datos globales
+        }
+
+        document.getElementById('detailsForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('imageTitleInput').value;
+            const message = document.getElementById('imageMessageInput').value;
+
+            if (currentImageData) {
+                addImageToGallery(currentImageData.secure_url, title, message, currentImageData.public_id);
+
+                let storedImages = JSON.parse(localStorage.getItem('images')) || [];
+                storedImages.push({ url: currentImageData.secure_url, title: title, message: message, publicId: currentImageData.public_id });
+                localStorage.setItem('images', JSON.stringify(storedImages));
+
+                closeInputModal(); // Cerrar modal después de guardar
+            } else {
+                console.error("No hay datos de imagen para guardar.");
+                alert("Error: No se encontraron datos de la imagen subida.");
+                closeInputModal();
+            }
+        });
+
+        // Función para eliminar la foto de la galería
+        function deleteImage(publicId) {
+            // Eliminar imagen de la galería
+            const photoWrapper = event.target.parentElement;
+            photoWrapper.remove();
+
+            // Eliminar la imagen de localStorage
+            let storedImages = JSON.parse(localStorage.getItem('images')) || [];
+            storedImages = storedImages.filter(image => image.publicId !== publicId);
+            localStorage.setItem('images', JSON.stringify(storedImages));
+
+            // Aquí puedes agregar la lógica para eliminar la imagen de Cloudinary si tienes backend
+            // Para esto necesitarías hacer una llamada a la API de Cloudinary para eliminar la imagen de la nube
+            // fetch(`https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/destroy`, {
+            //     method: 'POST',
+            //     body: JSON.stringify({ public_id: publicId }),
+            //     headers: { 'Content-Type': 'application/json' }
+            // })
+            // .then(response => response.json())
+            // .then(data => console.log('Imagen eliminada de Cloudinary', data))
+            // .catch(error => console.error('Error al eliminar imagen de Cloudinary:', error));
+        }
+    </script>
+    <script>
+        async function imageExists(url) {
+  try {
+    const response = await fetch(url, { method: 'HEAD' });
+    return response.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+    </script>
+</body>
+</html>

@@ -3,194 +3,344 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mis Recuerdos con mi Mascota 🐶</title>
+  <title>Recuerdos de Familia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #fff8f0;
+    :root {
+      --primary-color: #ff6b6b;
+      --secondary-color: #4ecdc4;
+      --background-color: #f7f7f7;
+      --text-color: #2d3436;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
-    header {
-      background-color: #ffb347;
-      color: white;
-      padding: 1rem;
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    h1 {
       text-align: center;
-      font-size: 1.5rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      color: var(--primary-color);
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .botones {
+    .formulario {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      max-width: 600px;
+      margin: 0 auto 2rem;
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 1rem 0;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    .botones button {
-      background-color: #ffb347;
-      border: none;
-      color: white;
-      padding: 10px 15px;
-      border-radius: 10px;
-      font-weight: bold;
+    input[type="file"] {
+      border: 2px dashed var(--secondary-color);
+      padding: 1rem;
+      border-radius: 8px;
+      width: 100%;
       cursor: pointer;
+    }
+
+    select {
+      padding: 0.8rem;
+      border: 2px solid var(--secondary-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #ff5252;
+      transform: translateY(-2px);
     }
 
     .galeria {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
       padding: 1rem;
     }
 
-    .foto {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: #fffaf3;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      overflow: hidden;
+    .galeria > div {
+      background: white;
+      padding: 1rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+      cursor: pointer;
     }
 
-    .foto img {
+    .galeria > div:hover {
+      transform: translateY(-5px);
+    }
+
+    .galeria img {
       width: 100%;
-      height: auto;
-      border-radius: 12px 12px 0 0;
-      cursor: pointer;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
     }
 
-    .titulo {
-      padding: 8px;
-      font-size: 0.9rem;
+    .galeria p {
       text-align: center;
-      color: #444;
+      color: var(--text-color);
+      font-weight: 500;
+      text-transform: capitalize;
     }
 
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .galeria {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+      
+      
+    }
     .overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
-    .overlay img {
-      max-width: 90%;
-      max-height: 80%;
-      border-radius: 20px;
-    }
+.overlay.active {
+  display: flex;
+}
 
-    .cerrar {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 2rem;
-      color: white;
-      cursor: pointer;
-    }
+.overlay img {
+  max-width: 90%;
+  max-height: 80vh;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
 
-    body.bloqueado {
-      overflow: hidden;
-    }
+.overlay-content {
+  color: white;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.overlay-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+}
+
+.formulario input[type="text"], 
+.formulario textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid var(--secondary-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.formulario textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+
+
+
   </style>
 </head>
 <body>
 
-<header>
-  Copito Memories
-</header>
+<h1>Recuerdos copito</h1>
+<div align="center">
+    <button onclick="window.location='carnet.html'">Carnet Copito</button>
 
-<div class="botones">
-    <a href="index.html">
-        <button>Inicio</button>
-      </a>
-      <a href="carnet.html">
-        <button>Carnet Copito</button>
-      </a>
 
+<div class="formulario">
+  <input type="file" id="foto" accept="image/*" required>
+  <input type="text" id="titulo" placeholder="Título de la foto" required>
+  <select id="categoria">
+    <option value="mascotas">Mascota</option>
+  </select>
+  <button onclick="subirFoto()">Subir Foto</button>
 </div>
 
 <div class="galeria" id="galeria"></div>
 
 <div class="overlay" id="overlay">
-  <span class="cerrar" onclick="cerrarOverlay()">×</span>
-  <img id="imagenGrande" src="">
+  <button class="overlay-close" onclick="cerrarOverlay()">&times;</button>
+  <img id="overlay-img">
+  <div class="overlay-content">
+    <h2 id="overlay-titulo"></h2>
+    <p id="overlay-descripcion"></p>
+  </div>
 </div>
 
+<!-- Primero el script de Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-  const DROPBOX_TOKEN = 'sl.u.AFrv6qw-MqwgfTXX1yP38WFh1KtsorL1LwwoU_qgnuI3pSXU4Cz_ZW5baCBJgHdI7RXKiEG-hg4RPzcAm6VTd5yzoerful5OcAysJrrJdUQ1Il2fdrdPfSaN7iLbZ8r-u8UEmEsI_NXqtdY6fexccOC1ZZa1HXmMc_UbERpFBEZy8zpUPb6oS_-Iqp8vaYul8GpTztTE49D-HvfUQH5gALs39cBuQPM3vhOjD1qtK2owgLHOwLIQyE-ZLy3sa7mH0e7YZy7GchXJ8wm0GlWbf2-TiUTbEhjMYsVNkJHaPvVAIFoXPFnKyvk10QDSVVwtNeOeLZuYU4UXq_YWZkjMsO0G_DWB2yZDaaQ118YGKUynp6BHCIoeDCdrJbrqA--VDcOMmfVvb-fr3lPd8gYSDvESBuNncYDgqlspWc_DOE3QxKCTy0_geWXjLzJJqoNytrXRUuyB3JpYJE8KJbR51a4WrPkE78S2RnEkJ-zEF1UOLLdOIVOzCiPQunIbkaFp8eZG6ie4OwpbYwQRglzR_62uhbwteC0CY0bVx4AIv0d6xWPkP1cQMq08r3QnDgRQ_HtFcj0deDYd2oR-674up4GMt3-CLleew_L9_guuxJA_iCRE8OBplkrCj8z0yMr5raBXChTOtweKqeID4qQHQID1fUkDsbpv_UXxwD7rCuUw3-M2wVdgpgmBUhY9TSwz7VUBA-NSGmX81m8WodXKzFV_JTGIlt2VTu_Cz0Uj6r0z6KS0_73fPiqp13Lm69Pn-OBBYbX05RjqYUAR6VQ5kHeZ_44dfs713JQcsOnV4v0jjlafZqZ-NfB4k3ob8l0qBC9msCsjQ3IBMVIr8g-0lAdW7YKRzXZrjmhNE_moLFr0mR0VyGPKXlMRM5fT_cE-ILlxfv_5CASBbxn-Ddrm4hfgZ5xsZ19xU5srHFeiwenKqUlBZNOZokAYqhzRVOJcQrxKLn5P4QvxzEyKqAS5vKU4JVvxCXPQy-sQ2CEy9B6Vezd94FlRBMn_m30kA5f7lCU9znfnFhfnLJ5XsoVqA_Zi23nsdrOBX3koOye1bX-evH50peEpYeSpp2zcVuIa3m5rQjy-sMYDK-K5zIWxaP_DuExcX6GlnVrjoCgsrz6PerhVPIRUyRV2TCIKRlRl2Plnzky-HjIfM8xkCR4ho89fuNLDqi2JDEElekStRuyTtF9AQXhwKDCGiEFv6IuSQvEKdGTYYvJJlVzFA77siIFAtcu76cEulVmFjOzz7WsF-DGdI7T990khAfeZnQdbjC8ERIUxfc-gVv8Y8LL3ol6JViB-jy5h1V4tg_VOPKQo4wvd9Tk9nilWkaqmU1CsF1Uz9i2OAUsasyTUrt7ShX7g1cIsWMAr7vo0sI9vKaDkQG0Y2XNkugaQ0oE7LH73QV9tzGrzHAnItj8UDSD6uwpt2nJjMVlzUllpyRfNhsmI_A';
-  const CARPETA = '/Copito-memories'; // cambia por tu carpeta
+  const SUPABASE_URL = 'https://ujjoocfesmsbjyibdsez.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqam9vY2Zlc21zYmp5aWJkc2V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3NzkyNjEsImV4cCI6MjA2MTM1NTI2MX0.xMRUmyP9jquM7nA647Ewgobghcc4YQZBIfTdJ0yWws8';
+  const BUCKET_NAME = 'fotos-familia';
 
-  function formatearTitulo(nombreArchivo) {
-    return nombreArchivo
-      .replace(/\.[^/.]+$/, '')        // Quita extensión
-      .replace(/[_-]/g, ' ')           // Reemplaza _ o - por espacio
-      .replace(/\b\w/g, l => l.toUpperCase()); // Capitaliza cada palabra
-  }
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  async function cargarFotos() {
-    const respuesta = await fetch('https://api.dropboxapi.com/2/files/list_folder', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + DROPBOX_TOKEN,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ path: CARPETA })
-    });
+  async function subirFoto() {
+    const archivoInput = document.getElementById('foto');
+    const titulo = document.getElementById('titulo').value;
+    const descripcion = document.getElementById('descripcion').value;
+    const categoria = document.getElementById('categoria').value;
+    const archivo = archivoInput.files[0];
 
-    const data = await respuesta.json();
-    const galeria = document.getElementById('galeria');
+    if (!archivo || !titulo || !descripcion) {
+      alert('Por favor complete todos los campos.');
+      return;
+    }
 
-    for (let archivo of data.entries) {
-      if (archivo['.tag'] === 'file' && /\.(jpg|jpeg|png|gif)$/i.test(archivo.name)) {
-        const enlaceTemp = await fetch('https://api.dropboxapi.com/2/files/get_temporary_link', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + DROPBOX_TOKEN,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ path: archivo.path_lower })
-        });
+    // Codificar los metadatos en el nombre del archivo
+    const metadataStr = `${encodeURIComponent(titulo)}__${encodeURIComponent(descripcion)}`;
+    const nombreArchivo = `${categoria}/${Date.now()}_${metadataStr}_${archivo.name}`;
 
-        const { link } = await enlaceTemp.json();
+    try {
+      const { data, error } = await client.storage.from(BUCKET_NAME).upload(nombreArchivo, archivo, {
+        upsert: true
+      });
 
-        const contenedor = document.createElement('div');
-        contenedor.className = 'foto';
-
-        const img = document.createElement('img');
-        img.src = link;
-        img.alt = archivo.name;
-        img.onclick = () => mostrarOverlay(link);
-
-        const nombre = document.createElement('div');
-        nombre.className = 'titulo';
-        nombre.textContent = formatearTitulo(archivo.name);
-
-        contenedor.appendChild(img);
-        contenedor.appendChild(nombre);
-        galeria.appendChild(contenedor);
+      if (error) {
+        alert('Error al subir la foto');
+        console.error(error);
+      } else {
+        alert('Foto subida con éxito');
+        document.getElementById('titulo').value = '';
+        document.getElementById('descripcion').value = '';
+        document.getElementById('foto').value = '';
+        mostrarFotos();
       }
+    } catch (error) {
+      console.error('Error al subir la foto:', error);
+      alert('Error al subir la foto');
     }
   }
 
-  function mostrarOverlay(src) {
-    document.getElementById('imagenGrande').src = src;
-    document.getElementById('overlay').style.display = 'flex';
-    document.body.classList.add('bloqueado');
+  async function mostrarFotos() {
+    const galeria = document.getElementById('galeria');
+    galeria.innerHTML = '';
+
+    try {
+      const { data: carpetas, error } = await client.storage.from(BUCKET_NAME).list('', { limit: 100 });
+
+      if (error) {
+        console.error('Error al listar carpetas:', error);
+        return;
+      }
+
+      for (const carpeta of carpetas) {
+        if (carpeta.name === 'recuerdos' || carpeta.name === 'mascotas') {
+          const { data: fotos, error: fotosError } = await client.storage.from(BUCKET_NAME).list(carpeta.name, { limit: 100 });
+
+          if (fotosError) {
+            console.error(`Error al listar fotos de ${carpeta.name}:`, fotosError);
+            continue;
+          }
+
+          for (const foto of fotos) {
+            try {
+              let titulo = 'Sin título';
+              let descripcion = 'Sin descripción';
+
+              // Intentar extraer los metadatos del nombre del archivo
+              const partes = foto.name.split('_');
+              if (partes.length >= 3) {
+                titulo = decodeURIComponent(partes[1]);
+                descripcion = decodeURIComponent(partes[2].split('_')[0]);
+              }
+              
+              const url = `${SUPABASE_URL.replace('/rest/v1', '')}/storage/v1/object/public/${BUCKET_NAME}/${carpeta.name}/${foto.name}`;
+
+              const div = document.createElement('div');
+              div.innerHTML = `
+                <img src="${url}" alt="${titulo}">
+                <p>${titulo}</p>
+              `;
+              div.onclick = () => abrirOverlay(url, { titulo, descripcion });
+              galeria.appendChild(div);
+            } catch (fotoError) {
+              console.error('Error al procesar foto:', fotoError);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error general en mostrarFotos:', error);
+    }
+  }
+
+  function abrirOverlay(url, metadata) {
+    const overlay = document.getElementById('overlay');
+    const overlayImg = document.getElementById('overlay-img');
+    const overlayTitulo = document.getElementById('overlay-titulo');
+    const overlayDescripcion = document.getElementById('overlay-descripcion');
+
+    overlayImg.src = url;
+    overlayTitulo.textContent = metadata.titulo;
+    overlayDescripcion.textContent = metadata.descripcion;
+    overlay.classList.add('active');
   }
 
   function cerrarOverlay() {
-    document.getElementById('overlay').style.display = 'none';
-    document.body.classList.remove('bloqueado');
+    const overlay = document.getElementById('overlay');
+    overlay.classList.remove('active');
   }
 
-  cargarFotos();
+  mostrarFotos();
 </script>
 
 </body>
 </html>
+
