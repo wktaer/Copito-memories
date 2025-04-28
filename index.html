@@ -217,7 +217,6 @@
   <img id="overlay-img">
   <div class="overlay-content">
     <h2 id="overlay-titulo"></h2>
-    <p id="overlay-descripcion"></p>
   </div>
 </div>
 
@@ -237,13 +236,13 @@
     const categoria = document.getElementById('categoria').value;
     const archivo = archivoInput.files[0];
 
-    if (!archivo || !titulo || !descripcion) {
+    if (!archivo || !titulo ) {
       alert('Por favor complete todos los campos.');
       return;
     }
 
     // Codificar los metadatos en el nombre del archivo
-    const metadataStr = `${encodeURIComponent(titulo)}__${encodeURIComponent(descripcion)}`;
+    const metadataStr = `${encodeURIComponent(titulo)}`;
     const nombreArchivo = `${categoria}/${Date.now()}_${metadataStr}_${archivo.name}`;
 
     try {
@@ -257,7 +256,6 @@
       } else {
         alert('Foto subida con éxito');
         document.getElementById('titulo').value = '';
-        document.getElementById('descripcion').value = '';
         document.getElementById('foto').value = '';
         mostrarFotos();
       }
@@ -291,13 +289,11 @@
           for (const foto of fotos) {
             try {
               let titulo = 'Sin título';
-              let descripcion = 'Sin descripción';
 
               // Intentar extraer los metadatos del nombre del archivo
               const partes = foto.name.split('_');
               if (partes.length >= 3) {
                 titulo = decodeURIComponent(partes[1]);
-                descripcion = decodeURIComponent(partes[2].split('_')[0]);
               }
               
               const url = `${SUPABASE_URL.replace('/rest/v1', '')}/storage/v1/object/public/${BUCKET_NAME}/${carpeta.name}/${foto.name}`;
@@ -307,7 +303,7 @@
                 <img src="${url}" alt="${titulo}">
                 <p>${titulo}</p>
               `;
-              div.onclick = () => abrirOverlay(url, { titulo, descripcion });
+              div.onclick = () => abrirOverlay(url, { titulo });
               galeria.appendChild(div);
             } catch (fotoError) {
               console.error('Error al procesar foto:', fotoError);
@@ -324,11 +320,9 @@
     const overlay = document.getElementById('overlay');
     const overlayImg = document.getElementById('overlay-img');
     const overlayTitulo = document.getElementById('overlay-titulo');
-    const overlayDescripcion = document.getElementById('overlay-descripcion');
 
     overlayImg.src = url;
     overlayTitulo.textContent = metadata.titulo;
-    overlayDescripcion.textContent = metadata.descripcion;
     overlay.classList.add('active');
   }
 
