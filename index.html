@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recuerdos de Familia</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Memorias de Copito 🐾</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root {
-      --primary-color: #ff6b6b;
-      --secondary-color: #4ecdc4;
-      --background-color: #f7f7f7;
-      --text-color: #2d3436;
-      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --primary-color: #8B4513;
+      --secondary-color: #D2691E;
+      --background-color: #FFF8DC;
+      --text-color: #4A3728;
+      --shadow: 0 4px 8px rgba(139, 69, 19, 0.2);
+      --accent-color: #FFB347;
     }
 
     * {
@@ -21,11 +23,14 @@
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Quicksand', 'Poppins', sans-serif;
       background-color: var(--background-color);
       color: var(--text-color);
       line-height: 1.6;
-      padding: 2rem;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 100 100'%3E%3Cpath d='M50,90 C40,90 30,80 30,70 C30,60 40,50 50,50 C60,50 70,60 70,70 C70,80 60,90 50,90 M25,45 C18,45 12,40 12,32 C12,25 18,20 25,20 C32,20 38,25 38,32 C38,40 32,45 25,45 M75,45 C68,45 62,40 62,32 C62,25 68,20 75,20 C82,20 88,25 88,32 C88,40 82,45 75,45 M50,30 C43,30 37,25 37,18 C37,11 43,6 50,6 C57,6 63,11 63,18 C63,25 57,30 50,30' fill='%238B4513' fill-opacity='0.1'/%3E%3C/svg%3E");
+      background-repeat: repeat;
     }
 
     h1 {
@@ -36,16 +41,95 @@
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-gif {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 0px solid white;
+      box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .hero-section h1 {
+      color: white;
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 1rem;
+    }
+
+    .menu-perruno {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      padding: 0 1rem;
+    }
+
+    .menu-item {
+      background: white;
+      color: var(--primary-color);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: var(--shadow);
+    }
+
+    .menu-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(139, 69, 19, 0.3);
+    }
+
+    .menu-item i {
+      font-size: 1.2rem;
+    }
+
     .formulario {
       background: white;
       padding: 2rem;
       border-radius: 15px;
       box-shadow: var(--shadow);
+      width: 95%;
       max-width: 600px;
       margin: 0 auto 2rem;
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      position: relative;
+      border: 2px solid var(--accent-color);
     }
 
     input[type="file"] {
@@ -83,11 +167,70 @@
 
     .galeria {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 2rem;
-      padding: 1rem;
+      gap: 1rem;
+      padding: 0.5rem;
+      width: 100%;
+      transition: all 0.3s ease;
     }
 
+    .galeria.compacta {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .galeria.dos-columnas {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .galeria.grande {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .galeria.grande img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+
+    .galeria.grande > div {
+      padding: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .galeria.grande > div:hover {
+      transform: translateY(-10px);
+    }
+    max-width: 800px;
+      margin: 0 auto;
+    }
+    .galeria.grande img {
+      height: auto;
+      max-height: 500px;
+    }
+    .controles-vista {
+      background: white;
+      padding: 1rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .controles-vista button {
+      padding: 0.5rem 1rem;
+      background-color: var(--secondary-color);
+    }
+
+    .controles-vista button.active {
+      background-color: var(--primary-color);
+    }
     .galeria > div {
       background: white;
       padding: 1rem;
@@ -103,7 +246,7 @@
 
     .galeria img {
       width: 100%;
-      height: 200px;
+      height: 160px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 0.5rem;
@@ -118,18 +261,39 @@
 
     @media (max-width: 768px) {
       body {
-        padding: 1rem;
+        padding: 0.5rem;
       }
 
       h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
       }
 
       .galeria {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        --min-width: 140px;
+        --columns: auto-fill;
+        grid-template-columns: repeat(var(--columns), minmax(var(--min-width), 1fr));
       }
-      
-      
+
+      .controles-vista {
+        flex-wrap: wrap;
+        padding: 0.5rem;
+      }
+
+      .controles-vista button {
+        flex: 1;
+        min-width: 100px;
+        font-size: 0.9rem;
+        padding: 0.8rem 0.5rem;
+        margin: 0.25rem;
+      }
+
+      input[type="file"],
+      select,
+      button {
+        font-size: 0.9rem;
+        padding: 0.8rem;
+      }
     }
     .overlay {
   display: none;
@@ -196,10 +360,30 @@
 </head>
 <body>
 
-<h1>Recuerdos copito</h1>
-<div align="center">
-    <button onclick="window.location='carnet.html'">Carnet Copito</button>
+<header class="hero-section">
+  <div class="hero-content">
+    <h1>Memorias de Copito </h1>
+  </div>
+  <img src="https://i.ibb.co/d46kGHzM/1743088895914-unscreen.gif" alt="Perrito blanco animado" class="hero-gif">
+</header>
 
+<nav class="menu-perruno">
+  <a href="carnet.html" class="menu-item">
+    <i class="fas fa-id-card"></i>
+    Carnet de Copito
+  </a>
+  <a href="#galeria" class="menu-item">
+    <i class="fas fa-images"></i>
+    Galería de Fotos
+  </a>
+</nav>
+
+
+<div class="controles-vista">
+  <button onclick="cambiarVista('compacta')" class="active">Vista Compacta</button>
+  <button onclick="cambiarVista('dos-columnas')">Dos Columnas</button>
+  <button onclick="cambiarVista('grande')">Vista Grande</button>
+</div>
 
 <div class="formulario">
   <input type="file" id="foto" accept="image/*" required>
@@ -332,8 +516,26 @@
   }
 
   mostrarFotos();
+
+  function cambiarVista(tipo) {
+  const galeria = document.querySelector('.galeria');
+  const botones = document.querySelectorAll('.controles-vista button');
+  
+  botones.forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  // Remover todas las clases de vista
+  galeria.classList.remove('compacta', 'dos-columnas', 'grande');
+  
+  // Añadir la clase correspondiente
+  galeria.classList.add(tipo);
+}
 </script>
 
 </body>
 </html>
+
+
+
+
 
