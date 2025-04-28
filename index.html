@@ -250,6 +250,12 @@
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 0.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .galeria img.loaded {
+      opacity: 1;
     }
 
     .galeria p {
@@ -461,6 +467,21 @@
         return;
       }
 
+      // Crear el Intersection Observer
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.add('loaded');
+            observer.unobserve(img);
+          }
+        });
+      }, {
+        rootMargin: '50px 0px',
+        threshold: 0.1
+      });
+
       for (const carpeta of carpetas) {
         if (carpeta.name === 'recuerdos' || carpeta.name === 'mascotas') {
           const { data: fotos, error: fotosError } = await client.storage.from(BUCKET_NAME).list(carpeta.name, { limit: 100 });
@@ -474,7 +495,6 @@
             try {
               let titulo = 'Sin título';
 
-              // Intentar extraer los metadatos del nombre del archivo
               const partes = foto.name.split('_');
               if (partes.length >= 3) {
                 titulo = decodeURIComponent(partes[1]);
@@ -484,11 +504,15 @@
 
               const div = document.createElement('div');
               div.innerHTML = `
-                <img src="${url}" alt="${titulo}">
+                <img data-src="${url}" alt="${titulo}" class="lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E">
                 <p>${titulo}</p>
               `;
               div.onclick = () => abrirOverlay(url, { titulo });
               galeria.appendChild(div);
+
+              // Observar la imagen
+              const img = div.querySelector('img');
+              observer.observe(img);
             } catch (fotoError) {
               console.error('Error al procesar foto:', fotoError);
             }
