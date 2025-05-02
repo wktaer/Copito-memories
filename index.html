@@ -358,6 +358,34 @@
   resize: vertical;
   min-height: 100px;
 }
+.filtro-select {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--secondary-color);
+  border-radius: 8px;
+  background-color: white;
+  color: var(--primary-color);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filtro-select:hover {
+  border-color: var(--primary-color);
+}
+
+.filtro-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-color);
+}
+.lazy-img {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.lazy-img.loaded {
+  opacity: 1;
+}
+
 
 
 
@@ -389,6 +417,7 @@
   <button onclick="cambiarVista('compacta')" class="active">Vista Compacta</button>
   <button onclick="cambiarVista('dos-columnas')">Dos Columnas</button>
   <button onclick="cambiarVista('grande')">Vista Grande</button>
+  
 </div>
 
 <div class="formulario">
@@ -399,6 +428,10 @@
   </select>
   <button onclick="subirFoto()">Subir Foto</button>
 </div>
+<select id="ordenFotos" onchange="ordenarFotos(this.value)" class="filtro-select">
+  <option value="reciente">Más recientes primero</option>
+  <option value="antigua">Más antiguas primero</option>
+</select>
 
 <div class="galeria" id="galeria"></div>
 
@@ -458,6 +491,8 @@
   async function mostrarFotos() {
     const galeria = document.getElementById('galeria');
     galeria.innerHTML = '';
+    const orden = document.getElementById('ordenFotos').value;
+    let todasLasFotos = [];
 
     try {
       const { data: carpetas, error } = await client.storage.from(BUCKET_NAME).list('', { limit: 100 });
@@ -467,19 +502,32 @@
         return;
       }
 
-      // Crear el Intersection Observer
-      const observer = new IntersectionObserver((entries, observer) => {
+      // Configuración mejorada del IntersectionObserver
+      const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const img = entry.target;
-            img.src = img.dataset.src;
-            img.classList.add('loaded');
-            observer.unobserve(img);
+            const src = img.dataset.src;
+            
+            if (src) {
+              // Crear una nueva imagen para precargar
+              const preloadImg = new Image();
+              
+              preloadImg.onload = () => {
+                img.src = src;
+                img.classList.add('loaded');
+                // Eliminar el placeholder y el data-src una vez cargada
+                img.removeAttribute('data-src');
+              };
+              
+              preloadImg.src = src;
+              observer.unobserve(img);
+            }
           }
         });
       }, {
-        rootMargin: '50px 0px',
-        threshold: 0.1
+        rootMargin: '50px 0px', // Cargar imágenes 50px antes de que sean visibles
+        threshold: 0.1 // Comenzar a cargar cuando el 10% de la imagen sea visible
       });
 
       for (const carpeta of carpetas) {
@@ -491,37 +539,61 @@
             continue;
           }
 
-          for (const foto of fotos) {
-            try {
-              let titulo = 'Sin título';
-
-              const partes = foto.name.split('_');
-              if (partes.length >= 3) {
-                titulo = decodeURIComponent(partes[1]);
-              }
-              
-              const url = `${SUPABASE_URL.replace('/rest/v1', '')}/storage/v1/object/public/${BUCKET_NAME}/${carpeta.name}/${foto.name}`;
-
-              const div = document.createElement('div');
-              div.innerHTML = `
-                <img data-src="${url}" alt="${titulo}" class="lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E">
-                <p>${titulo}</p>
-              `;
-              div.onclick = () => abrirOverlay(url, { titulo });
-              galeria.appendChild(div);
-
-              // Observar la imagen
-              const img = div.querySelector('img');
-              observer.observe(img);
-            } catch (fotoError) {
-              console.error('Error al procesar foto:', fotoError);
-            }
-          }
+          fotos.forEach(foto => {
+            const timestamp = parseInt(foto.name.split('_')[0]);
+            todasLasFotos.push({ foto, carpeta: carpeta.name, timestamp });
+          });
         }
       }
+
+      // Ordenar las fotos según el criterio seleccionado
+      todasLasFotos.sort((a, b) => {
+        if (orden === 'reciente') {
+          return b.timestamp - a.timestamp;
+        } else {
+          return a.timestamp - b.timestamp;
+        }
+      });
+
+      todasLasFotos.forEach(({ foto, carpeta }) => {
+        try {
+          let titulo = 'Sin título';
+          const partes = foto.name.split('_');
+          if (partes.length >= 3) {
+            titulo = decodeURIComponent(partes[1]);
+          }
+          
+          const url = `${SUPABASE_URL.replace('/rest/v1', '')}/storage/v1/object/public/${BUCKET_NAME}/${carpeta}/${foto.name}`;
+
+          const div = document.createElement('div');
+          div.innerHTML = `
+            <div class="imagen-contenedor">
+              <img 
+                data-src="${url}" 
+                alt="${titulo}" 
+                class="lazy" 
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E"
+                loading="lazy">
+              <div class="imagen-placeholder"></div>
+            </div>
+            <p>${titulo}</p>
+          `;
+          div.onclick = () => abrirOverlay(url, { titulo });
+          galeria.appendChild(div);
+
+          const img = div.querySelector('img');
+          imageObserver.observe(img);
+        } catch (fotoError) {
+          console.error('Error al procesar foto:', fotoError);
+        }
+      });
     } catch (error) {
       console.error('Error general en mostrarFotos:', error);
     }
+  }
+
+  function ordenarFotos(criterio) {
+    mostrarFotos();
   }
 
   function abrirOverlay(url, metadata) {
@@ -555,9 +627,75 @@
   galeria.classList.add(tipo);
 }
 </script>
+<script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const realSrc = img.getAttribute("data-src");
+          if (realSrc) {
+            img.src = realSrc;
+            img.onload = () => img.classList.add("loaded");
+            img.removeAttribute("data-src");
+            obs.unobserve(img);
+          }
+        }
+      });
+    }, { rootMargin: "100px" });
+
+    document.querySelectorAll("img.lazy-img").forEach(img => observer.observe(img));
+  });
+</script>
+
+</script>
 
 </body>
 </html>
+
+
+</style>
+.imagen-contenedor {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.imagen-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.lazy {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.lazy.loaded {
+  opacity: 1;
+}
+
+.lazy.loaded + .imagen-placeholder {
+  display: none;
+}
+</style>
 
 
 
